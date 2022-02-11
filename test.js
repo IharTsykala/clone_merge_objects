@@ -1,33 +1,31 @@
 
 const cloneObject = (resultClone, firstObj) => {
-    for (const firstObjKey in firstObj) {
-      if (typeof firstObj[firstObjKey] === "object" && !Array.isArray(firstObj[firstObjKey])) {
-        resultClone[firstObjKey] = cloneObj({}, firstObj[firstObjKey])
-      } else if (Array.isArray(firstObj[firstObjKey])) {
-        resultClone[firstObjKey] = [...firstObj[firstObjKey]]
-      } else if (firstObj[firstObjKey] && typeof firstObj[firstObjKey] !== "object") {
-        resultClone[firstObjKey] = firstObj[firstObjKey]
-      }
+  for (const firstObjKey in firstObj) {
+    if (typeof firstObj[firstObjKey] === "object" && !Array.isArray(firstObj[firstObjKey])) {
+      resultClone[firstObjKey] = cloneObject({}, firstObj[firstObjKey])
+    } else if (Array.isArray(firstObj[firstObjKey])) {
+      resultClone[firstObjKey] = [...firstObj[firstObjKey]]
+    } else {
+      resultClone[firstObjKey] = firstObj[firstObjKey]
     }
-    return resultClone
   }
-
-
+  return resultClone
+}
 
 const mergeObjects = (objFirst, objSecond) => {
   for (let objSecondKey in objSecond) {
     if (typeof objSecond[objSecondKey] === "object" && !Array.isArray(objFirst[objSecondKey])) {
-      objFirst[objSecondKey] = merge(objFirst[objSecondKey], objSecond[objSecondKey])
+      objFirst[objSecondKey] = mergeObjects(objFirst[objSecondKey], objSecond[objSecondKey])
     } else if (
       typeof objSecond[objSecondKey] === "object" &&
       Array.isArray(objFirst[objSecondKey]) &&
       objFirst[objSecondKey][objFirst[objSecondKey].length - 1] !== objSecond[objSecondKey]
     ) {
       objFirst[objSecondKey] = [...objFirst[objSecondKey], objSecond[objSecondKey]]
-    } else if (typeof objSecond[objSecondKey] !== "object" && typeof objFirst[objSecondKey] !== "object") {
-      objFirst[objSecondKey] = objSecond[objSecondKey]
     } else if (objSecond[objSecondKey] === undefined && Array.isArray(objFirst[objSecondKey])) {
       objFirst[objSecondKey] = []
+    } else {
+      objFirst[objSecondKey] = objSecond[objSecondKey]
     }
   }
   for (let objFirstKey in objFirst) {
