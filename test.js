@@ -103,4 +103,4 @@ var b = {
 //   return current
 // }
 
-console.log(merge(a, b))
+console.log(mergeObjects(a, b))
